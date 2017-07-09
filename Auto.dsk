@@ -1,0 +1,4 @@
+<Desktop>
+	<Window name="FileManager" loader="WMFileManager.Restore" l="713" t="531" r="1354" b="927" flags="{0..2,13}"/>
+	<Window name="WMKernelLog" loader="WMKernelLog.Restore" l="766" t="85" r="1406" b="473" flags="{0..2,13}"/>
+</Desktop>
