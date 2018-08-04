@@ -1,15 +1,15 @@
 MODULE TuringPll;
-IMPORT Base,Raster, Random, Objects, WMRectangles, WMGraphics, Modules, Strings,
+IMPORT Raster, Random, Objects, WMRectangles, WMGraphics, Modules, Strings,
 	WM := WMWindowManager, Math;
 
 CONST
-	M =1000; 
+	M =200; 
 	M2 = (M DIV 2);
-	MSIZE =1
+	MSIZE =2
 
 TYPE Twindow* =  OBJECT(WM.BufferWindow)
-VAR
-	mesh1, mesh2, n1 : ARRAY M,M OF REAL;
+VAR	
+	mesh1, mesh2, n1 : ARRAY M+2,M+2 OF REAL;
 	alive, dead: BOOLEAN;
 	i : LONGINT;
 		
@@ -37,8 +37,8 @@ BEGIN
 			n1[i, j] := 0
 		END
 	END;
-	FOR i :=  1 TO M - 2 DO
-		FOR j := 1 TO M - 2 DO
+	FOR i :=  2 TO M - 3 DO
+		FOR j := 2 TO M - 3 DO
 			IF random.Dice(100) > 98 THEN mesh1[i, j] := random.Dice(1000)/1000 END
 		END
 	END;
@@ -60,17 +60,23 @@ PROCEDURE Generation;
 VAR i, j,im1,ip1,jm1,jp1: LONGINT;
 BEGIN
 	FOR i := 0 TO M - 1 DO
-		FOR j := 0 TO M - 1 DO
-			im1:=(i-1)MOD M; ip1:=(i+1)MOD M; jm1:=(j-1)MOD M; jp1:=(j+1)MOD M; 
-			n1[i, j] := mesh1[im1, j] + mesh1[ip1, j] + mesh1[i, jm1] + mesh1[i, jp1]
-				+ mesh1[im1, jm1] +  mesh1[ip1, jp1] + mesh1[ip1, jm1] + mesh1[im1, jp1]
+		mesh1[i, M-1]:= mesh1[i,2]; 
+		mesh1[i,0]:= mesh1[i,M-2]; 
+	END;
+	FOR j := 0 TO M - 1 DO
+		mesh1[M-1,j] := mesh1[2,j]; 
+		mesh1[0,j] := mesh1[M-2,j]; 
+	END;	
+	FOR i := 1 TO M - 2 DO
+		FOR j := 1 TO M - 2 DO
+			n1[i, j] := mesh1[i+1, j] + mesh1[i-1, j] + mesh1[i, j+1] + mesh1[i, j-1]		
 		END
 	END;
 	FOR i := 0 TO M - 1 DO
 		FOR j := 0 TO M - 1 DO
-			(*  HERE ARE THE DIFFERENCE RULES! *)	
-			mesh1[i, j] := mesh1[i, j] + n1[i, j]/(73+i/113) - mesh2[i, j];
-			mesh2[i, j] := ABS(mesh2[i, j] +  mesh1[i, j]/100 - 0.0000073*j);   
+			(*  HERE ARE THE DIFFEREnCE RULES! *)	
+			mesh1[i, j] := mesh1[i, j] + n1[i, j]/(253+i/7) - mesh2[i, j]/(1+j/150);
+			mesh2[i, j] := ABS(mesh2[i, j] +  mesh1[i, j]/140 - (0.000013*j + 0.000033*(i MOD 10)));   
 			IF mesh1[i, j] < 0 THEN mesh1[i, j] := 0 END;
 			IF mesh2[i, j] < 0 THEN mesh2[i, j] := 0 END;
 			IF mesh1[i, j] > 1 THEN mesh1[i, j] := 1 END;
@@ -90,10 +96,9 @@ BEGIN
 		ix := i * MSIZE;
 		FOR j := 0 TO M - 1 DO
 			jy := j * MSIZE;
-			r:=SHORT((ENTIER(mesh1[i, j] * 255)));
-			g:=SHORT((ENTIER(mesh2[i, j] * 55)));
-			blue:= SHORT(255- ENTIER(mesh1[i, j] * 1357) MOD 255);
-			Raster.SetRGB(pix,r,g,blue);
+			r:=SHORT(ENTIER(mesh1[i, j] * 255));
+			blue:= SHORT(ENTIER(mesh2[i, j] * 11357) MOD 255);
+			Raster.SetRGB(pix,r,100,blue);
 			Raster.Fill(img, ix, jy, ix+MSIZE, jy+MSIZE, pix, mode)
 		END
 	END;
@@ -130,6 +135,6 @@ BEGIN
 	NEW(random);
 END TuringPll.
 
-SystemTools.Free TuringPll ~
+System.Free TuringPll ~
 
 TuringPll.Open ~

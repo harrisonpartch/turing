@@ -145,7 +145,7 @@ TYPE
 				ix := i * size ;
 				FOR j := 0 TO M - 1 DO
 					jy := j * size;
-					Raster.SetRGB(pix, SHORT((200-ENTIER(mesh1[i, j] * 200)) ),SHORT((255-ENTIER(n1[i, j] * 255)) ), SHORT((ENTIER(mesh2[i, j] * 200)) ));
+					Raster.SetRGB(pix, SHORT((255-ENTIER(mesh1[i, j] * 255)) ),SHORT((255-ENTIER(mesh1[i, j] * 255)) ), SHORT((255-ENTIER(mesh2[i, j] *255)) ));
 					Raster.Fill(img, ix, jy, ix+size, jy+size, pix, mode)
 				END
 			END;
@@ -197,6 +197,6 @@ BEGIN
 	Modules.InstallTermHandler(Cleanup);
 END Turing.
 
-SystemTools.Free Turing ~
+System.Free Turing ~
 
 Turing.Open ~
