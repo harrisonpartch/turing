@@ -1,15 +1,18 @@
 MODULE TuringPll;
 IMPORT Raster, Random, Objects, WMRectangles, WMGraphics, Modules, Strings,
-	WM := WMWindowManager, Math;
+	WM := WMWindowManager, Math, Out:=KernelLog, TT:=TuringTile;
 
 CONST
-	M =200; 
-	M2 = (M DIV 2);
-	MSIZE =2
-
+	M = TT.M;
+	TILEI=TT.TILEI;
+	TILEJ=TT.TILEJ;
+	TW=TT.TW;
+	TH=TT.TH;
+	T=TW*TH;
+	MSIZE =TT.MSIZE;
+	
 TYPE Twindow* =  OBJECT(WM.BufferWindow)
 VAR	
-	mesh1, mesh2, n1 : ARRAY M+2,M+2 OF REAL;
 	alive, dead: BOOLEAN;
 	i : LONGINT;
 		
@@ -20,6 +23,14 @@ BEGIN
 	ELSE
 	END
 END KeyEvent;
+
+PROCEDURE WheelMove(dz:LONGINT);
+BEGIN
+	gens:=SHORT(gens+dz);
+	IF gens<1 THEN gens := 1 END;
+	Out.Int(gens, 2);
+	Out.Ln;
+END WheelMove;
 
 PROCEDURE &New*;
 VAR 
@@ -32,14 +43,14 @@ BEGIN
 	SetIcon(WMGraphics.LoadImage("WMIcons.tar://TuringCoatWnd.png", TRUE));
 	FOR i := 0 TO M - 1 DO
 		FOR j := 0 TO M - 1 DO
-			mesh1[i, j] := 0;
-			mesh2[i, j] := 0;
-			n1[i, j] := 0
+			TT.mesh1[i, j] := 0;
+			TT.mesh2[i, j] := 0;
+			TT.n1[i, j] := 0
 		END
 	END;
 	FOR i :=  2 TO M - 3 DO
 		FOR j := 2 TO M - 3 DO
-			IF random.Dice(100) > 98 THEN mesh1[i, j] := random.Dice(1000)/1000 END
+			IF random.Dice(100) > 98 THEN TT.mesh1[i, j] := random.Dice(1000)/1000 END
 		END
 	END;
 END New;
@@ -56,36 +67,7 @@ BEGIN
 	Close^;
 END Close;
 
-PROCEDURE Generation;
-VAR i, j,im1,ip1,jm1,jp1: LONGINT;
-BEGIN
-	FOR i := 0 TO M - 1 DO
-		mesh1[i, M-1]:= mesh1[i,2]; 
-		mesh1[i,0]:= mesh1[i,M-2]; 
-	END;
-	FOR j := 0 TO M - 1 DO
-		mesh1[M-1,j] := mesh1[2,j]; 
-		mesh1[0,j] := mesh1[M-2,j]; 
-	END;	
-	FOR i := 1 TO M - 2 DO
-		FOR j := 1 TO M - 2 DO
-			n1[i, j] := mesh1[i+1, j] + mesh1[i-1, j] + mesh1[i, j+1] + mesh1[i, j-1]		
-		END
-	END;
-	FOR i := 0 TO M - 1 DO
-		FOR j := 0 TO M - 1 DO
-			(*  HERE ARE THE DIFFEREnCE RULES! *)	
-			mesh1[i, j] := mesh1[i, j] + n1[i, j]/(253+i/7) - mesh2[i, j]/(1+j/150);
-			mesh2[i, j] := ABS(mesh2[i, j] +  mesh1[i, j]/140 - (0.000013*j + 0.000033*(i MOD 10)));   
-			IF mesh1[i, j] < 0 THEN mesh1[i, j] := 0 END;
-			IF mesh2[i, j] < 0 THEN mesh2[i, j] := 0 END;
-			IF mesh1[i, j] > 1 THEN mesh1[i, j] := 1 END;
-			IF mesh2[i, j] > 1 THEN mesh2[i, j] := 1 END;
-		END;
-	END;
-END Generation;
-
-PROCEDURE DrawIt;
+PROCEDURE DrawIta;
 VAR i, j, ix, jy : LONGINT;
 	pix : Raster.Pixel;
 	mode : Raster.Mode;
@@ -96,29 +78,70 @@ BEGIN
 		ix := i * MSIZE;
 		FOR j := 0 TO M - 1 DO
 			jy := j * MSIZE;
-			r:=SHORT(ENTIER(mesh1[i, j] * 255));
-			blue:= SHORT(ENTIER(mesh2[i, j] * 11357) MOD 255);
-			Raster.SetRGB(pix,r,100,blue);
+			r:=SHORT(ENTIER(TT.mesh1[i, j] * 255) MOD 255);
+			blue:= SHORT(ENTIER(TT.mesh2[i, j] * 1357) MOD 255);
+			Raster.SetRGB(pix,r,10,blue);
 			Raster.Fill(img, ix, jy, ix+MSIZE, jy+MSIZE, pix, mode)
 		END
 	END;
 	Invalidate(WMRectangles.MakeRect(0, 0, GetWidth(), GetHeight()))
-END DrawIt;
+END DrawIta;
+
+PROCEDURE DrawItb;
+VAR i, j, ix, jy : LONGINT;
+	pix : Raster.Pixel;
+	mode : Raster.Mode;
+	r,g,blue: INTEGER;
+BEGIN
+	Raster.InitMode(mode, Raster.srcCopy);
+	FOR i := 1 TO M -2 DO
+		ix := i * MSIZE;
+		FOR j := 1 TO M - 2 DO
+			jy := j * MSIZE;
+			r:=SHORT(ENTIER(TT.mesh1a[i, j] * 255) MOD 255);
+			blue:= SHORT(ENTIER(TT.mesh2a[i, j] * 1357) MOD 255);
+			Raster.SetRGB(pix,r,0,blue);
+			Raster.Fill(img, ix, jy, ix+MSIZE, jy+MSIZE, pix, mode)
+		END
+	END;
+	Invalidate(WMRectangles.MakeRect(0, 0, GetWidth(), GetHeight()))
+END DrawItb;
+
+PROCEDURE gotiles;
+VAR
+	i,j: INTEGER;
+BEGIN	
+	BEGIN {EXCLUSIVE} TT.tilesdone:=0 END; 
+	FOR i:= 0 TO TW-1  DO
+		FOR j:= 0 TO TH-1 DO
+			tile[i,j].go;
+		END
+	END;	
+(*     Out.String('xa'); 
+	BEGIN {EXCLUSIVE} AWAIT(TT.tilesdone=T); END; 
+	Objects.Sleep(1);*)
+END gotiles;
 
 BEGIN {ACTIVE}
+	Objects.SetPriority(Objects.Normal);
 	alive := TRUE;
-	Objects.SetPriority(Objects.Low);
-	WHILE alive DO
-		FOR i := 0 TO 0 DO Generation END;
-		DrawIt;
-	(*	Objects.Sleep(10) *)
-	END;
+	gens:=10;
+	REPEAT
+		FOR i:= 0 TO gens DO 
+			gotiles
+		END;
+		DrawIta;
+		Out.Ln;
+	UNTIL ~alive;
+	TT.wdead:=TRUE;
 	BEGIN {EXCLUSIVE} dead := TRUE; END;
 END Twindow;
 
 VAR
-	tw: Twindow;
+	tw: Twindow; 
+	a,b,i,gens: INTEGER;
 	random : Random.Generator;
+	tile: ARRAY TW, TH OF TT.Tile;
 	
 PROCEDURE Open*;
 BEGIN
@@ -133,6 +156,11 @@ END Close;
 BEGIN
 	Modules.InstallTermHandler(Close);
 	NEW(random);
+	FOR a:= 0 TO TW-1  DO
+		FOR b:= 0 TO TH-1 DO
+			NEW(tile[a,b], a*TILEI+1, b*TILEJ+1);
+		END
+	END;		
 END TuringPll.
 
 System.Free TuringPll ~

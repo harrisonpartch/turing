@@ -1,10 +1,21 @@
 <Desktop>
-	<Window name="FileManager" loader="WMFileManager.Restore" l="4" t="406" r="645" b="716" flags="{0..2,13}"/>
 	<Window name="WMKernelLog" loader="WMKernelLog.Restore" l="4" t="87" r="644" b="378" flags="{0..2,13}"/>
-	<Window name="PET" loader="PET.Restore" l="42" t="110" r="842" b="710" flags="{0..2,13}">
+	<Window name="PET" loader="PET.Restore" l="674" t="87" r="1531" b="1067" flags="{0..2,13}">
 		<PETData>
 			<General SelectedPageNr="0" ProjectTextFile=""/>
-			<Tab file="/home/valentine/turing/Turing.Tool" codecFormat="AUTO" compilerOptions="\check" showLabels="false" wordWrap="false">
+			<Tab file="/home/valentine/turing/TuringPll.Mod" codecFormat="AUTO" compilerOptions="-p=Unix64 --warnings" showLabels="false" wordWrap="false">
+				<Editor firstLine="118" cursorPos="3388"/>
+				<SplitEditor visible="false" firstLine="0" cursorPos="0" height="400"/>
+				<SearchPanel visible="false" wrap="false" casesensitive="true" backwards="false" highlight="false" searchString="" replaceString=""/>
+				<LogPanel height="130"/>
+				<SidePanel visible="true" width="250" scratchHeight="5"/>
+			</Tab>
+		</PETData>
+	</Window>
+	<Window name="PET" loader="PET.Restore" l="1086" t="131" r="1886" b="731" flags="{0..2,13}">
+		<PETData>
+			<General SelectedPageNr="0" ProjectTextFile=""/>
+			<Tab file="/home/valentine/turing/TuringTile.Mod" codecFormat="AUTO" compilerOptions="-p=Unix64 --warnings" showLabels="false" wordWrap="false">
 				<Editor firstLine="0" cursorPos="0"/>
 				<SplitEditor visible="false" firstLine="0" cursorPos="0" height="400"/>
 				<SearchPanel visible="false" wrap="false" casesensitive="true" backwards="false" highlight="false" searchString="" replaceString=""/>
@@ -13,10 +24,10 @@
 			</Tab>
 		</PETData>
 	</Window>
-	<Window name="PET" loader="PET.Restore" l="839" t="120" r="1639" b="720" flags="{0..2,13}">
+	<Window name="PET" loader="PET.Restore" l="394" t="93" r="1194" b="693" flags="{0..2,13}">
 		<PETData>
 			<General SelectedPageNr="0" ProjectTextFile=""/>
-			<Tab file="/home/valentine/turing/TuringPll.Mod" codecFormat="AUTO" compilerOptions="-p=Unix64 --warnings" showLabels="false" wordWrap="false">
+			<Tab file="/home/valentine/turing/Turing.Tool" codecFormat="AUTO" compilerOptions="\check" showLabels="false" wordWrap="false">
 				<Editor firstLine="0" cursorPos="0"/>
 				<SplitEditor visible="false" firstLine="0" cursorPos="0" height="400"/>
 				<SearchPanel visible="false" wrap="false" casesensitive="true" backwards="false" highlight="false" searchString="" replaceString=""/>
