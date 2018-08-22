@@ -79,8 +79,8 @@ BEGIN
 		FOR j := 0 TO M - 1 DO
 			jy := j * MSIZE;
 			r:=SHORT(ENTIER(TT.mesh1[i, j] * 255) MOD 255);
-			blue:= SHORT(ENTIER(TT.mesh2[i, j] * 1357) MOD 255);
-			Raster.SetRGB(pix,r,10,blue);
+			blue:= SHORT(ENTIER(TT.mesh2[i, j]*3500) MOD 255);
+			Raster.SetRGB(pix,r,0,blue);
 			Raster.Fill(img, ix, jy, ix+MSIZE, jy+MSIZE, pix, mode)
 		END
 	END;
@@ -131,7 +131,6 @@ BEGIN {ACTIVE}
 			gotiles
 		END;
 		DrawIta;
-		Out.Ln;
 	UNTIL ~alive;
 	TT.wdead:=TRUE;
 	BEGIN {EXCLUSIVE} dead := TRUE; END;
