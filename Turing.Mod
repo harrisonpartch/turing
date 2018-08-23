@@ -14,29 +14,6 @@ CONST
 TYPE
 	KillerMsg = OBJECT
 	END KillerMsg;
-
-	Stripe = OBJECT
-	VAR
-		GO: BOOLEAN;
-		I: LONGINT;
-		
-	PROCEDURE go;
-	BEGIN{EXCLUSIVE}
-		GO:=TRUE
-	END go;
-	
-	BEGIN{ACTIVE, PRIORITY(Objects.Low)}
-		REPEAT
-			BEGIN{EXCLUSIVE}
-				AWAIT(GO)
-			END;
-
-			BEGIN{EXCLUSIVE}
-				GO:=FALSE
-			END;
-			
-		UNTIL FALSE;
-	END Stripe;	
 	
 	TCW* =  OBJECT(WM.BufferWindow)
 	VAR

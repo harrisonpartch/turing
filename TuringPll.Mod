@@ -53,6 +53,11 @@ BEGIN
 			IF random.Dice(100) > 98 THEN TT.mesh1[i, j] := random.Dice(1000)/1000 END
 		END
 	END;
+	FOR i :=  2 TO M - 3 DO
+		FOR j := 2 TO M - 3 DO
+			TT.g[i, j] := random.Dice(2);  (* should be 0 | 1 *)
+		END
+	END;	
 END New;
 
 PROCEDURE Draw*(canvas : WMGraphics.Canvas; w, h, q : LONGINT);
@@ -71,16 +76,17 @@ PROCEDURE DrawIta;
 VAR i, j, ix, jy : LONGINT;
 	pix : Raster.Pixel;
 	mode : Raster.Mode;
-	r,g,blue: INTEGER;
+	red,green,blue: INTEGER;
 BEGIN
 	Raster.InitMode(mode, Raster.srcCopy);
 	FOR i := 0 TO M - 1 DO
 		ix := i * MSIZE;
 		FOR j := 0 TO M - 1 DO
 			jy := j * MSIZE;
-			r:=SHORT(ENTIER(TT.mesh1[i, j] * 255) MOD 255);
+			red:=SHORT(ENTIER(TT.mesh1[i, j] * 255) MOD 255);
+			green:=SHORT(TT.g[i, j]*254);
 			blue:= SHORT(ENTIER(TT.mesh2[i, j]*3500) MOD 255);
-			Raster.SetRGB(pix,r,0,blue);
+			Raster.SetRGB(pix,red,green,blue);
 			Raster.Fill(img, ix, jy, ix+MSIZE, jy+MSIZE, pix, mode)
 		END
 	END;
@@ -125,7 +131,7 @@ END gotiles;
 BEGIN {ACTIVE}
 	Objects.SetPriority(Objects.Normal);
 	alive := TRUE;
-	gens:=10;
+	gens:=1;
 	REPEAT
 		FOR i:= 0 TO gens DO 
 			gotiles
@@ -164,4 +170,4 @@ END TuringPll.
 
 System.Free TuringPll ~
 
-TuringPll.Open ~
+TuringPll.Open 
