@@ -1,17 +1,32 @@
 <Desktop>
-	<Window name="WMKernelLog" loader="WMKernelLog.Restore" l="4" t="87" r="644" b="378" flags="{0..2,13}"/>
-	<Window name="PET" loader="PET.Restore" l="357" t="81" r="1157" b="681" flags="{0..2,13}">
+	<Window name="WMKernelLog" loader="WMKernelLog.Restore" l="80" t="77" r="720" b="368" flags="{0..2,13}"/>
+	<Window name="FileManager" loader="WMFileManager.Restore" l="42" t="110" r="542" b="510" flags="{0..2,13}"/>
+	<Window name="PET" loader="PET.Restore" l="775" t="194" r="1575" b="794" flags="{0..2,13}">
 		<PETData>
-			<General SelectedPageNr="1" ProjectTextFile=""/>
+			<General SelectedPageNr="0" ProjectTextFile=""/>
 			<Tab file="/home/valentine/turing/Turing.Tool" codecFormat="AUTO" compilerOptions="\check" showLabels="false" wordWrap="false">
-				<Editor firstLine="0" cursorPos="121"/>
+				<Editor firstLine="0" cursorPos="145"/>
 				<SplitEditor visible="false" firstLine="0" cursorPos="0" height="400"/>
 				<SearchPanel visible="false" wrap="false" casesensitive="true" backwards="false" highlight="false" searchString="" replaceString=""/>
 				<LogPanel height="130"/>
 				<SidePanel visible="true" width="250" scratchHeight="5"/>
 			</Tab>
 			<Tab file="Turing.Mod" codecFormat="AUTO" compilerOptions="-p=Unix64 --warnings" showLabels="false" wordWrap="false">
-				<Editor firstLine="75" cursorPos="4473"/>
+				<Editor firstLine="0" cursorPos="0"/>
+				<SplitEditor visible="false" firstLine="0" cursorPos="0" height="400"/>
+				<SearchPanel visible="false" wrap="false" casesensitive="true" backwards="false" highlight="false" searchString="" replaceString=""/>
+				<LogPanel height="130"/>
+				<SidePanel visible="true" width="250" scratchHeight="5"/>
+			</Tab>
+			<Tab file="TuringPII.Mod" codecFormat="AUTO" compilerOptions="-p=Unix64 --warnings" showLabels="false" wordWrap="false">
+				<Editor firstLine="0" cursorPos="0"/>
+				<SplitEditor visible="false" firstLine="0" cursorPos="0" height="400"/>
+				<SearchPanel visible="false" wrap="false" casesensitive="true" backwards="false" highlight="false" searchString="" replaceString=""/>
+				<LogPanel height="130"/>
+				<SidePanel visible="true" width="250" scratchHeight="5"/>
+			</Tab>
+			<Tab file="TuringTile.Mod" codecFormat="AUTO" compilerOptions="-p=Unix64 --warnings" showLabels="false" wordWrap="false">
+				<Editor firstLine="0" cursorPos="0"/>
 				<SplitEditor visible="false" firstLine="0" cursorPos="0" height="400"/>
 				<SearchPanel visible="false" wrap="false" casesensitive="true" backwards="false" highlight="false" searchString="" replaceString=""/>
 				<LogPanel height="130"/>
